@@ -2,9 +2,9 @@ using FluentValidation;
 using JobSearchManagerBack.DTOs;
 using JobSearchManagerBack.Entities;
 
-internal class JobApplicationDTOValidator : AbstractValidator<JobApplicationDTO>
+internal class JobApplicationPostDTOValidator : AbstractValidator<JobApplicationPostDTO>
 {
-    public JobApplicationDTOValidator(HashSet<Status> allStatuses)
+    public JobApplicationPostDTOValidator(HashSet<Status> allStatuses)
     {
         RuleFor(jobApp => jobApp.Source)
             .NeitherNullNorEmpty()
@@ -18,12 +18,12 @@ internal class JobApplicationDTOValidator : AbstractValidator<JobApplicationDTO>
         RuleFor(jobApp => jobApp.Place).NeitherNullNorEmpty().WithMessage(GetRuleMessage("Lieu"));
         RuleFor(jobApp => jobApp.StatusId)
             .NeitherNullNorEmpty()
-            .SetValidator(new StatusValidator<JobApplicationDTO>(allStatuses));
+            .SetValidator(new StatusValidator<JobApplicationPostDTO>(allStatuses));
         RuleFor(jobApp => jobApp.FeelingLevel).GreaterThanOrEqualTo(0).LessThanOrEqualTo(5);
     }
 
     private string GetRuleMessage(string fieldName)
     {
-        return $"Le champ '{fieldName}' doit être saisi";
+        return $"Le champ '{fieldName}' doit ï¿½tre saisi";
     }
 }

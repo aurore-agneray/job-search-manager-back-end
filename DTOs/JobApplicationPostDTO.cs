@@ -2,11 +2,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace JobSearchManagerBack.DTOs;
 
-internal class JobApplicationDTO
+internal class JobApplicationPostDTO
 {
-    [Column("Id")]
-    public required int Id { get; set; }
-
     [Column("Date")]
     public string? Date { get; set; }
 
