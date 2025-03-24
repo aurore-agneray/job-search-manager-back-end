@@ -19,6 +19,10 @@ internal static class ApiMethods
         app.MapPost("/jobapplication", PostJobApplication)
             .WithName("PostJobApplication")
             .WithOpenApi();
+
+        app.MapDelete("/jobapplication", DeleteJobApplication)
+            .WithName("DeleteJobApplication")
+            .WithOpenApi();
     }
 
     internal static HashSet<JobApplication> GetAllJobApplications(
@@ -79,5 +83,26 @@ internal static class ApiMethods
         database.SaveChanges();
 
         return Results.Ok(job);
+    }
+
+    internal static IResult DeleteJobApplication(
+        [FromServices] SqlServerDbContext database,
+        [FromQuery] string id
+    )
+    {
+        JobApplication? jobApp = null;
+
+        if (
+            (jobApp = database.JobApplications.FirstOrDefault(jobApp => jobApp.Id.ToString() == id))
+            != null
+        )
+        {
+            database.Remove(jobApp);
+            database.SaveChanges();
+
+            return Results.Ok(RequestsErrorTexts.OK_JOB_APPLICATION_DELETED);
+        }
+
+        return Results.NotFound(RequestsErrorTexts.ERROR_JOB_APPLICATION_NOT_IDENTIFIED);
     }
 }
