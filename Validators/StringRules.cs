@@ -1,5 +1,7 @@
 using FluentValidation;
 
+namespace JobSearchManagerBack.Validators;
+
 internal static class StringRules
 {
     const string _urlRegexExpression =

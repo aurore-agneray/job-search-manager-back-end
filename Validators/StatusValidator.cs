@@ -1,6 +1,9 @@
 using FluentValidation;
 using FluentValidation.Validators;
 using JobSearchManagerBack.Entities;
+using JobSearchManagerBack.Texts;
+
+namespace JobSearchManagerBack.Validators;
 
 internal class StatusValidator<T> : PropertyValidator<T, string>
 {
