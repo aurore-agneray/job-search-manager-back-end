@@ -1,3 +1,4 @@
+using FluentValidation.Results;
 using JobSearchManagerBack.Data;
 using JobSearchManagerBack.DTOs;
 using JobSearchManagerBack.Entities;
@@ -23,21 +24,43 @@ internal static class ApiMethods
 
         app.MapPost(
                 "/jobapplication",
-                ([FromServices] SqlServerDbContext database, JobApplicationDTO data) =>
+                (
+                    [FromServices] SqlServerDbContext database,
+                    [FromBody] JobApplicationPostDTO data
+                ) =>
                 {
                     if (data is null)
                     {
                         return Results.Problem("The data are empty !");
                     }
 
-                    Status? status = database
-                        .Status.Where(s => s.Id == int.Parse(data.StatusId))
-                        .SingleOrDefault();
+                    Dictionary<string, string[]>? potentialErrors = null;
 
-                    if (status is null)
+                    // Dictionary<string, string[]>? potentialErrors = _GenericValidator<
+                    //     JobApplicationPostDTOValidator,
+                    //     JobApplicationPostDTO
+                    // >.TryValidation(data);
+
+                    JobApplicationPostDTOValidator validator = new(database.Status.ToHashSet());
+                    ValidationResult results = validator.Validate(data);
+
+                    if (!results.IsValid)
                     {
-                        return Results.Problem("The status has not been identified !");
+                        potentialErrors = results.Errors.ToDictionary(
+                            (value) => value.PropertyName,
+                            (value) => new string[] { value.ErrorMessage }
+                        );
                     }
+
+                    if (potentialErrors is not null)
+                    {
+                        return Results.ValidationProblem(potentialErrors);
+                    }
+
+                    // Can be retrieved without any error because it was previously checked
+                    Status status = database
+                        .Status.Where(s => s.Id == int.Parse(data.StatusId))
+                        .Single();
 
                     JobApplication job = new()
                     {
