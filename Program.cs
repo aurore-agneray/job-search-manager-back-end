@@ -20,6 +20,10 @@ builder.Services.AddDbContext<SqlServerDbContext>(optionsBuilder =>
     optionsBuilder.UseSqlServer(connectionString);
 });
 
+// Add CORS policy for the front-end domains
+string frontEndDomains = builder.Configuration.GetValue<string>("FrontEndDomains")!;
+builder.Services.AddCors(BuilderOptions.GetCorsOptions(frontEndDomains));
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -38,5 +42,7 @@ app.UseHttpsRedirection();
 
 // Configures my API routes and methods
 ApiMethods.Configure(app);
+
+app.UseCors();
 
 app.Run();
