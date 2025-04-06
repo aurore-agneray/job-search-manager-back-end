@@ -22,6 +22,9 @@ public class AutoMapperProfile : Profile
                         src.Date.HasValue ? src.Date.Value.ToString("yyyy-MM-dd") : string.Empty
                     )
             )
-            .ForMember(dest => dest.StatusId, opt => opt.MapFrom(src => src.Status.Id));
+            .ForMember(
+                dest => dest.StatusId,
+                opt => opt.MapFrom(src => src.Status.Guid.ToString())
+            );
     }
 }

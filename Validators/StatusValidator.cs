@@ -20,7 +20,7 @@ internal class StatusValidator<T> : PropertyValidator<T, string>
     {
         if (int.TryParse(statusId, out int intStatusId))
         {
-            return _allStatuses.Any(s => s.Id == int.Parse(statusId));
+            return _allStatuses.Any(s => s.Guid.ToString() == statusId);
         }
 
         return false;

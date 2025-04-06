@@ -10,5 +10,5 @@ internal class SqlServerDbContext : DbContext
 
     public DbSet<JobApplication> JobApplications { get; set; }
 
-    public DbSet<Status> Status { get; set; }
+    public DbSet<Status> Statuses { get; set; }
 }
