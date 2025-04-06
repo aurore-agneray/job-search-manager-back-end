@@ -1,3 +1,4 @@
+using AutoMapper;
 using FluentValidation.Results;
 using JobSearchManagerBack.Data;
 using JobSearchManagerBack.DTOs;
@@ -5,6 +6,7 @@ using JobSearchManagerBack.Entities;
 using JobSearchManagerBack.Texts;
 using JobSearchManagerBack.Validators;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace JobSearchManagerBack.Configuration;
 
@@ -25,11 +27,14 @@ internal static class ApiMethods
             .WithOpenApi();
     }
 
-    internal static HashSet<JobApplication> GetAllJobApplications(
-        [FromServices] SqlServerDbContext database
+    internal static HashSet<JobApplicationGetDTO> GetAllJobApplications(
+        [FromServices] SqlServerDbContext database,
+        [FromServices] IMapper mapper
     )
     {
-        var jobApps = database.JobApplications;
+        var jobApps = mapper.Map<HashSet<JobApplicationGetDTO>>(
+            database.JobApplications.Include(applic => applic.Status)
+        );
         return [.. jobApps];
     }
 

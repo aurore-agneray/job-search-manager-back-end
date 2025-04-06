@@ -20,6 +20,12 @@ builder.Services.AddDbContext<SqlServerDbContext>(optionsBuilder =>
     optionsBuilder.UseSqlServer(connectionString);
 });
 
+// Add AutoMapper for mapping between DTOs and entities
+builder.Services.AddAutoMapper(cfg =>
+{
+    cfg.AddProfile<AutoMapperProfile>();
+});
+
 // Add CORS policy for the front-end domains
 string frontEndDomains = builder.Configuration.GetValue<string>("FrontEndDomains")!;
 builder.Services.AddCors(BuilderOptions.GetCorsOptions(frontEndDomains));
