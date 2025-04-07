@@ -57,9 +57,10 @@ internal static class JobApplicationMethods
 
         if (!results.IsValid)
         {
+            int errorCounter = 1;
             potentialErrors = results.Errors.ToDictionary(
-                (value) => value.PropertyName,
-                (value) => new string[] { value.ErrorMessage }
+                (error) => @$"{error.PropertyName}_{errorCounter++}",
+                (error) => new string[] { error.ErrorMessage }
             );
         }
 

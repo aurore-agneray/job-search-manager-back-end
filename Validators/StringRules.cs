@@ -1,3 +1,4 @@
+using System.Text.RegularExpressions;
 using FluentValidation;
 using JobSearchManagerBack.Texts;
 
@@ -23,7 +24,19 @@ internal static class StringRules
     /// </summary>
     public static IRuleBuilderOptions<T, string?> Url<T>(this IRuleBuilder<T, string?> ruleBuilder)
     {
-        return ruleBuilder.Matches(_urlRegexExpression);
+        return (IRuleBuilderOptions<T, string?>)
+            ruleBuilder.Custom(
+                (url, context) =>
+                {
+                    if (!string.IsNullOrEmpty(url) && !Regex.IsMatch(url, _urlRegexExpression))
+                    {
+                        context.AddFailure(
+                            context.PropertyPath,
+                            RequestsErrorTexts.ERROR_URL_FORMAT
+                        );
+                    }
+                }
+            );
     }
 
     /// <summary>

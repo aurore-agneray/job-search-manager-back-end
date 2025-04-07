@@ -10,6 +10,7 @@ internal class RequestsErrorTexts
     public const string ERROR_STATUS_NOT_IDENTIFIED = "Le statut n'a pas été identifié";
     public const string ERROR_JOB_APPLICATION_NOT_IDENTIFIED = "La candidature n'a pas été trouvée";
     public const string ERROR_DATE_FORMAT = "Le format de la date fournie est incorrect";
+    public const string ERROR_URL_FORMAT = "Le format de l'URL fournie est incorrect";
 
     public static string GetRequiredMessage(string fieldName)
     {
