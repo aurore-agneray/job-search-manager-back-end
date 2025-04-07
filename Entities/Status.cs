@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
 namespace JobSearchManagerBack.Entities;
@@ -8,8 +9,10 @@ namespace JobSearchManagerBack.Entities;
 [PrimaryKey(nameof(Id), nameof(Guid))]
 internal class Status
 {
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public required int Id { get; set; }
 
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
     public required Guid Guid { get; set; }
 
     public required string Name { get; set; }

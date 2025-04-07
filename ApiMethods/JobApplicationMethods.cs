@@ -112,8 +112,11 @@ internal static class JobApplicationMethods
         JobApplication? jobApp = null;
 
         if (
-            (jobApp = database.JobApplications.FirstOrDefault(jobApp => jobApp.Id.ToString() == id))
-            != null
+            (
+                jobApp = database.JobApplications.FirstOrDefault(jobApp =>
+                    jobApp.Guid.ToString() == id
+                )
+            ) != null
         )
         {
             database.Remove(jobApp);

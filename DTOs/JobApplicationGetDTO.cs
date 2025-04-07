@@ -4,6 +4,9 @@ namespace JobSearchManagerBack.DTOs;
 
 internal class JobApplicationGetDTO
 {
+    [Column("id")]
+    public required string Id { get; set; }
+
     [Column("Date")]
     public string Date { get; set; } = string.Empty;
 

@@ -4,11 +4,15 @@ using Microsoft.EntityFrameworkCore;
 namespace JobSearchManagerBack.Entities;
 
 [Table("JobApplications")]
-[PrimaryKey("Id")]
+[PrimaryKey(nameof(Id), nameof(Guid))]
 internal class JobApplication
 {
     [Column("Id")]
-    public int Id { get; set; }
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public int Id { get; init; }
+
+    [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
+    public Guid Guid { get; init; }
 
     [Column("Date")]
     public DateTime? Date { get; set; }

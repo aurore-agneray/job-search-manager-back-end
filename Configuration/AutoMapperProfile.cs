@@ -15,6 +15,7 @@ public class AutoMapperProfile : Profile
     public AutoMapperProfile()
     {
         CreateMap<JobApplication, JobApplicationGetDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Guid.ToString()))
             .ForMember(
                 dest => dest.Date,
                 opt =>
