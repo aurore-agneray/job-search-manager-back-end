@@ -17,6 +17,7 @@ internal static class ApiMethods
         app.MapDelete("/jobapplication", JobApplicationMethods.DeleteOne)
             .WithName("DeleteJobApplication")
             .WithOpenApi();
-        
+
+        app.MapGet("/statuses", StatusMethods.GetAll).WithName("GetAllStatuses").WithOpenApi();
     }
 }

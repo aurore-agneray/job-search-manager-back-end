@@ -26,5 +26,8 @@ public class AutoMapperProfile : Profile
                 dest => dest.StatusId,
                 opt => opt.MapFrom(src => src.Status.Guid.ToString())
             );
+
+        CreateMap<Status, StatusGetDTO>()
+            .ForMember(dest => dest.Id, opt => opt.MapFrom(src => src.Guid.ToString()));
     }
 }
