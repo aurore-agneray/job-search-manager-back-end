@@ -9,6 +9,7 @@ internal class JobApplicationPostDTOValidator : AbstractValidator<JobApplication
 {
     public JobApplicationPostDTOValidator(HashSet<Status> allStatuses)
     {
+        RuleFor(jobApp => jobApp.Date).DateFormat();
         RuleFor(jobApp => jobApp.Source)
             .NeitherNullNorEmpty()
             .WithMessage(RequestsErrorTexts.GetRequiredMessage(RequestsErrorTexts.SOURCE));

@@ -52,11 +52,6 @@ internal static class JobApplicationMethods
 
         Dictionary<string, string[]>? potentialErrors = null;
 
-        // Dictionary<string, string[]>? potentialErrors = _GenericValidator<
-        //     JobApplicationPostDTOValidator,
-        //     JobApplicationPostDTO
-        // >.TryValidation(data);
-
         JobApplicationPostDTOValidator validator = new([.. database.Statuses]);
         ValidationResult results = validator.Validate(data);
 
@@ -81,6 +76,7 @@ internal static class JobApplicationMethods
 
         JobApplication job = new()
         {
+            Date = !string.IsNullOrEmpty(data.Date) ? DateTime.Parse(data.Date) : null,
             Source = data.Source,
             IsSpontaneous = data.IsSpontaneous,
             IsFromMyInitiative = data.IsFromMyInitiative,
