@@ -80,9 +80,14 @@ internal static class JobApplicationMethods
             Source = data.Source,
             IsSpontaneous = data.IsSpontaneous,
             IsFromMyInitiative = data.IsFromMyInitiative,
+            OfferUrl = data.OfferUrl,
             Position = data.Position,
-            Status = status,
             Place = data.Place,
+            Status = status,
+            Motivations = data.Motivations,
+            Notes = data.Notes,
+            Contacts = data.Contacts,
+            FeelingLevel = data.FeelingLevel ?? 0,
         };
 
         database.JobApplications.Add(job);
