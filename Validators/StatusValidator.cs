@@ -18,12 +18,8 @@ internal class StatusValidator<T> : PropertyValidator<T, string>
 
     public override bool IsValid(ValidationContext<T> context, string statusId)
     {
-        if (int.TryParse(statusId, out int intStatusId))
-        {
-            return _allStatuses.Any(s => s.Guid.ToString() == statusId);
-        }
-
-        return false;
+        // TODO (PERHAPS) : ADD UPPERCASE CHECK FOR THE GUID
+        return _allStatuses.Any(s => statusId.Equals(s.Guid.ToString()));
     }
 
     protected override string GetDefaultMessageTemplate(string errorCode) =>

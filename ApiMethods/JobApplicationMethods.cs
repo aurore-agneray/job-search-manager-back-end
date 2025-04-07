@@ -38,6 +38,7 @@ internal static class JobApplicationMethods
     /// <response code="500">An error occurred into the process, returns an explicit information message</response>
     internal static IResult PostOne(
         [FromServices] SqlServerDbContext database,
+        [FromServices] IMapper mapper,
         [FromBody] JobApplicationPostDTO data
     )
     {
@@ -73,7 +74,10 @@ internal static class JobApplicationMethods
         }
 
         // Can be retrieved without any error because it was previously checked
-        Status status = database.Statuses.Where(s => s.Guid.ToString() == data.StatusId).Single();
+        // TODO (PERHAPS) : ADD UPPERCASE CHECK FOR THE GUID
+        Status status = database
+            .Statuses.Where(s => data.StatusId.Equals(s.Guid.ToString()))
+            .Single();
 
         JobApplication job = new()
         {
@@ -88,7 +92,7 @@ internal static class JobApplicationMethods
         database.JobApplications.Add(job);
         database.SaveChanges();
 
-        return Results.Ok(job);
+        return Results.Ok(mapper.Map<JobApplicationGetDTO>(job));
     }
 
     /// <summary>
