@@ -1,6 +1,6 @@
 # 🚀️👀️ API pour gérer mes candidatures 👀️🚀️
 
-Commençant à accumuler les candidatures pour un emploi dans le développement web .NET, j'ai fini par me dire : "Hey ! Pourquoi ne pas développer ma propre application pour gérer mes candidatures ?".
+Commençant à accumuler les candidatures pour un emploi dans le développement web .NET, j'ai fini par me dire : "Hey ! Pourquoi ne pas développer ma propre application pour gérer mes candidatures, tout en apprenant React.js et TypeScript  ?".
 
 Pour le moment, l'application se contente de gérer toutes les candidatures présentes dans la base de données. 
 
