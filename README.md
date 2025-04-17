@@ -8,10 +8,10 @@ Par la suite je vais ajouter la gestion de comptes utilisateurs.
 
 _____________________
 
-Résumé des requêtes disponibles :
-- Etats de candidature : 
+## Résumé des requêtes disponibles :
+### Etats de candidature : 
 >GET - GetAll - *domain_name*/**statuses**
-- Candidatures : 
+### Candidatures : 
 >GET - GetAll - *domain_name*/**jobapplications**
 
 >POST - PostOne - *domain_name*/**jobapplication**
