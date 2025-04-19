@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add the connection to the MySQL database
+// Add the connection to the SQL Server database
 builder.Services.AddDbContext<SqlServerDbContext>(optionsBuilder =>
 {
     string connectionString = builder.Configuration.GetValue<string>("ConnectionString")!;

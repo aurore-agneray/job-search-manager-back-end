@@ -2,8 +2,15 @@ using JobSearchManagerBack.ApiMethods;
 
 namespace JobSearchManagerBack.Configuration;
 
+/// <summary>
+/// Describes the CRUD methods of the application
+/// </summary>
 internal static class ApiMethods
 {
+    /// <summary>
+    /// Configure the API methods of the application, have to be called into the Program.cs file
+    /// </summary>
+    /// <param name="app">The object representation of the application</param>
     internal static void Configure(WebApplication app)
     {
         app.MapGet("/jobapplications", JobApplicationMethods.GetAll)

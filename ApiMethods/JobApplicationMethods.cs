@@ -87,6 +87,8 @@ internal static class JobApplicationMethods
     {
         JobApplication? jobApp = null;
 
+        /* Try to retrieve the job application from the database
+        identified by its GUID before deleting it */
         if (
             (
                 jobApp = database.JobApplications.FirstOrDefault(jobApp =>

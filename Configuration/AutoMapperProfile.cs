@@ -5,7 +5,7 @@ using JobSearchManagerBack.Entities;
 namespace JobSearchManagerBack.Configuration;
 
 /// <summary>
-/// Defines the profile used for configuring the AutoMapper package
+/// Defines the profile used for configuring the AutoMapper package into the Program.cs file
 /// </summary>
 public class AutoMapperProfile : Profile
 {

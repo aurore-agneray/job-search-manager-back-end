@@ -5,8 +5,15 @@ using JobSearchManagerBack.Texts;
 
 namespace JobSearchManagerBack.Validators.Fluent;
 
+/// <summary>
+/// Validator dedicated to be called into the job application POST method
+/// </summary>
 internal class JobApplicationPostDTOValidator : AbstractValidator<JobApplicationPostDTO>
 {
+    /// <summary>
+    /// Constructor of the validator
+    /// </summary>
+    /// <param name="allStatuses">All statuses available into the database</param>
     public JobApplicationPostDTOValidator(HashSet<Status> allStatuses)
     {
         RuleFor(jobApp => jobApp.Date).DateFormat();
