@@ -1,6 +1,6 @@
-using JobSearchManagerBack.Configuration;
-using JobSearchManagerBack.Data;
-using JobSearchManagerBack.Texts;
+using JobSearchManagerBackEnd.Configuration;
+using JobSearchManagerBackEnd.Data;
+using JobSearchManagerBackEnd.Texts;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);

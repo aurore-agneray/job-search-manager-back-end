@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobSearchManagerBack.Entities;
+namespace JobSearchManagerBackEnd.Entities;
 
 /// <summary>
 /// Represents the state of a job application (Sent, Processing, Rejected, etc)

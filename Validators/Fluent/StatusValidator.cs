@@ -1,9 +1,9 @@
 using FluentValidation;
 using FluentValidation.Validators;
-using JobSearchManagerBack.Entities;
-using JobSearchManagerBack.Texts;
+using JobSearchManagerBackEnd.Entities;
+using JobSearchManagerBackEnd.Texts;
 
-namespace JobSearchManagerBack.Validators.Fluent;
+namespace JobSearchManagerBackEnd.Validators.Fluent;
 
 /// <summary>
 /// Validator dedicated to check the validity of the wanted status

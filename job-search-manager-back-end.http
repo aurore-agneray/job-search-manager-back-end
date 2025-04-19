@@ -1,6 +1,6 @@
-@JobSearchManagerBack_HostAddress = http://localhost:5275
+@JobSearchManagerBackEnd_HostAddress = http://localhost:5275
 
-GET {{JobSearchManagerBack_HostAddress}}/weatherforecast/
+GET {{JobSearchManagerBackEnd_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###

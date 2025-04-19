@@ -1,9 +1,9 @@
 using FluentValidation;
-using JobSearchManagerBack.DTOs;
-using JobSearchManagerBack.Entities;
-using JobSearchManagerBack.Texts;
+using JobSearchManagerBackEnd.DTOs;
+using JobSearchManagerBackEnd.Entities;
+using JobSearchManagerBackEnd.Texts;
 
-namespace JobSearchManagerBack.Validators.Fluent;
+namespace JobSearchManagerBackEnd.Validators.Fluent;
 
 /// <summary>
 /// Validator dedicated to be called into the job application POST method

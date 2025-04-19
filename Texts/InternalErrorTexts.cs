@@ -1,4 +1,4 @@
-namespace JobSearchManagerBack.Texts;
+namespace JobSearchManagerBackEnd.Texts;
 
 /// <summary>
 /// Contains the texts used into the app that NEVER WILL BE SENT TO THE FRONT CLIENT !!

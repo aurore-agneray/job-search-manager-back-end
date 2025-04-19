@@ -1,6 +1,6 @@
-using JobSearchManagerBack.ApiMethods;
+using JobSearchManagerBackEnd.ApiMethods;
 
-namespace JobSearchManagerBack.Configuration;
+namespace JobSearchManagerBackEnd.Configuration;
 
 /// <summary>
 /// Describes the CRUD methods of the application

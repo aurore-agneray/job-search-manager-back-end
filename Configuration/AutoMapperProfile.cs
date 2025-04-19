@@ -1,8 +1,8 @@
 using AutoMapper;
-using JobSearchManagerBack.DTOs;
-using JobSearchManagerBack.Entities;
+using JobSearchManagerBackEnd.DTOs;
+using JobSearchManagerBackEnd.Entities;
 
-namespace JobSearchManagerBack.Configuration;
+namespace JobSearchManagerBackEnd.Configuration;
 
 /// <summary>
 /// Defines the profile used for configuring the AutoMapper package into the Program.cs file

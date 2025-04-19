@@ -1,6 +1,6 @@
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace JobSearchManagerBack.DTOs;
+namespace JobSearchManagerBackEnd.DTOs;
 
 internal class JobApplicationGetDTO
 {

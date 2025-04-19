@@ -1,9 +1,9 @@
 using AutoMapper;
-using JobSearchManagerBack.Data;
-using JobSearchManagerBack.DTOs;
+using JobSearchManagerBackEnd.Data;
+using JobSearchManagerBackEnd.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobSearchManagerBack.ApiMethods;
+namespace JobSearchManagerBackEnd.ApiMethods;
 
 /// <summary>
 /// Defines all CRUD methods for the Status entities

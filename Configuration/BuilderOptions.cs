@@ -1,7 +1,7 @@
-using JobSearchManagerBack.Texts;
+using JobSearchManagerBackEnd.Texts;
 using Microsoft.AspNetCore.Cors.Infrastructure;
 
-namespace JobSearchManagerBack.Configuration;
+namespace JobSearchManagerBackEnd.Configuration;
 
 /// <summary>
 /// Defines the options for the services declared into the Program.cs file

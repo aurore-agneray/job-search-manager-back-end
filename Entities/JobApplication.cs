@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobSearchManagerBack.Entities;
+namespace JobSearchManagerBackEnd.Entities;
 
 [Table("JobApplications")]
 [PrimaryKey(nameof(Id), nameof(Guid))]

@@ -1,7 +1,7 @@
-using JobSearchManagerBack.Entities;
+using JobSearchManagerBackEnd.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobSearchManagerBack.Data;
+namespace JobSearchManagerBackEnd.Data;
 
 /// <summary>
 /// Describes the content of the SQL Server database and give access to it

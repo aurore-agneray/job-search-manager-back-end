@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 using FluentValidation;
-using JobSearchManagerBack.Texts;
+using JobSearchManagerBackEnd.Texts;
 
-namespace JobSearchManagerBack.Validators.Fluent;
+namespace JobSearchManagerBackEnd.Validators.Fluent;
 
 /// <summary>
 /// Describes all the rules that can be applied to a string value, using the FluentValidation library

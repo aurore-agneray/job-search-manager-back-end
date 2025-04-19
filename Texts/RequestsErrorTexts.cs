@@ -1,4 +1,4 @@
-namespace JobSearchManagerBack.Texts;
+namespace JobSearchManagerBackEnd.Texts;
 
 /// <summary>
 /// Contains the error messages sent to the user

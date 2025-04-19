@@ -1,10 +1,10 @@
 using FluentValidation.Results;
-using JobSearchManagerBack.DTOs;
-using JobSearchManagerBack.Entities;
-using JobSearchManagerBack.Validators.Fluent;
+using JobSearchManagerBackEnd.DTOs;
+using JobSearchManagerBackEnd.Entities;
+using JobSearchManagerBackEnd.Validators.Fluent;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobSearchManagerBack.Validators;
+namespace JobSearchManagerBackEnd.Validators;
 
 /// <summary>
 /// Dedicated class to validate the data sent by the user

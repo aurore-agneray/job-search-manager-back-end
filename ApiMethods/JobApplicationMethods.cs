@@ -1,13 +1,13 @@
 using AutoMapper;
-using JobSearchManagerBack.Data;
-using JobSearchManagerBack.DTOs;
-using JobSearchManagerBack.Entities;
-using JobSearchManagerBack.Texts;
-using JobSearchManagerBack.Validators;
+using JobSearchManagerBackEnd.Data;
+using JobSearchManagerBackEnd.DTOs;
+using JobSearchManagerBackEnd.Entities;
+using JobSearchManagerBackEnd.Texts;
+using JobSearchManagerBackEnd.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobSearchManagerBack.ApiMethods;
+namespace JobSearchManagerBackEnd.ApiMethods;
 
 /// <summary>
 /// Defines all CRUD methods for the JobApplication entities
