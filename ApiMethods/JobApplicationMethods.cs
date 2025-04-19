@@ -1,5 +1,4 @@
 using AutoMapper;
-using FluentValidation.Results;
 using JobSearchManagerBack.Data;
 using JobSearchManagerBack.DTOs;
 using JobSearchManagerBack.Entities;
@@ -50,26 +49,15 @@ internal static class JobApplicationMethods
             );
         }
 
-        Dictionary<string, string[]>? potentialErrors = null;
-
-        JobApplicationPostDTOValidator validator = new([.. database.Statuses]);
-        ValidationResult results = validator.Validate(data);
-
-        if (!results.IsValid)
-        {
-            int errorCounter = 1;
-            potentialErrors = results.Errors.ToDictionary(
-                (error) => @$"{error.PropertyName}_{errorCounter++}",
-                (error) => new string[] { error.ErrorMessage }
-            );
-        }
+        DataValidator validator = new(database.Statuses, data);
+        var potentialErrors = validator.ValidatePostedOneJobApplication();
 
         if (potentialErrors is not null)
         {
             return Results.ValidationProblem(potentialErrors);
         }
 
-        // Can be retrieved without any error because it was previously checked
+        // The status can be retrieved without any error because it was previously checked
         // TODO (PERHAPS) : ADD UPPERCASE CHECK FOR THE GUID
         Status status = database
             .Statuses.Where(s => data.StatusId.Equals(s.Guid.ToString()))

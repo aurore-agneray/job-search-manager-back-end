@@ -1,7 +1,7 @@
 using FluentValidation;
 using FluentValidation.Results;
 
-namespace JobSearchManagerBack.Validators;
+namespace JobSearchManagerBack.Validators.Fluent;
 
 internal static class _GenericValidator<TValidator, TData>
     where TValidator : AbstractValidator<TData>, new()

@@ -3,7 +3,7 @@ using JobSearchManagerBack.DTOs;
 using JobSearchManagerBack.Entities;
 using JobSearchManagerBack.Texts;
 
-namespace JobSearchManagerBack.Validators;
+namespace JobSearchManagerBack.Validators.Fluent;
 
 internal class JobApplicationPostDTOValidator : AbstractValidator<JobApplicationPostDTO>
 {
