@@ -49,6 +49,7 @@ internal static class JobApplicationMethods
             );
         }
 
+        // Validation of the formats of the sent data
         DataValidator validator = new(database.Statuses, data);
         var potentialErrors = validator.ValidatePostedOneJobApplication();
 
@@ -63,21 +64,7 @@ internal static class JobApplicationMethods
             .Statuses.Where(s => data.StatusId.Equals(s.Guid.ToString()))
             .Single();
 
-        JobApplication job = new()
-        {
-            Date = !string.IsNullOrEmpty(data.Date) ? DateTime.Parse(data.Date) : null,
-            Source = data.Source,
-            IsSpontaneous = data.IsSpontaneous,
-            IsFromMyInitiative = data.IsFromMyInitiative,
-            OfferUrl = data.OfferUrl,
-            Position = data.Position,
-            Place = data.Place,
-            Status = status,
-            Motivations = data.Motivations,
-            Notes = data.Notes,
-            Contacts = data.Contacts,
-            FeelingLevel = data.FeelingLevel ?? 0,
-        };
+        JobApplication job = EntitiesGenerator.GeneratePostedJobApplication(data, status);
 
         database.JobApplications.Add(job);
         database.SaveChanges();
