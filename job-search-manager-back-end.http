@@ -1,6 +1,35 @@
 @JobSearchManagerBackEnd_HostAddress = http://localhost:5275
 
-GET {{JobSearchManagerBackEnd_HostAddress}}/weatherforecast/
+POST {{JobSearchManagerBackEnd_HostAddress}}/jobapplication
+Content-Type: application/json
+
+{
+    "date": "2023-01-06",
+    "source": "TEST",
+    "isSpontaneous": true,
+    "isFromMyInitiative": true,
+    "offerUrl": "https://test.com",
+    "position": "Développeuse .NET",
+    "place": "Somewhere Over The Rainbow",
+    "statusId": "6de9733e-fe5d-4fd7-a16f-e22f99385db6",
+    "motivations": "JE SUIS MOTIVEE !",
+    "notes": "Je prends des notes ...",
+    "contacts": "Je suis un contact",
+    "feelingLevel": 5
+}
+
+###
+
+GET {{JobSearchManagerBackEnd_HostAddress}}/jobapplications
 Accept: application/json
+
+###
+
+GET {{JobSearchManagerBackEnd_HostAddress}}/statuses
+Accept: application/json
+
+###
+
+DELETE {{JobSearchManagerBackEnd_HostAddress}}/jobapplication?id=044510dc-147b-4104-8250-8a636dbd97f0
 
 ###
