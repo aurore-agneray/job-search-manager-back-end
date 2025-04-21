@@ -9,7 +9,7 @@ internal class InternalErrorTexts
     /// Used into StartUpDI for reporting the missing connection string
     /// </summary>
     public const string ERROR_MISSING_CONNEXION_STRING =
-        "Les paramÃ¨tres de connexion Ã  la base de donnÃ©es {0} sont manquants";
+        "Les paramètres de connexion à la base de données {0} sont manquants";
 
     /// <summary>
     /// Used into StartUpOptions for reporting the missing front-end domains
