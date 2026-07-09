@@ -21,6 +21,10 @@ internal static class ApiMethods
             .WithName("PostJobApplication")
             .WithOpenApi();
 
+        app.MapPut("/jobapplication", JobApplicationMethods.UpdateOne)
+            .WithName("UpdateJobApplication")
+            .WithOpenApi();
+
         app.MapDelete("/jobapplication", JobApplicationMethods.DeleteOne)
             .WithName("DeleteJobApplication")
             .WithOpenApi();
