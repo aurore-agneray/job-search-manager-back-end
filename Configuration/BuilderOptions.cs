@@ -31,7 +31,7 @@ public static class BuilderOptions
                 policy
                     .WithOrigins(frontDomains.Length > 0 ? frontDomains : ["http://localhost:5173"])
                     .WithHeaders("Content-type")
-                    .WithMethods("GET", "POST", "DELETE");
+                    .WithMethods("GET", "POST", "DELETE", "PUT");
             });
         };
     }
