@@ -2,6 +2,7 @@ using AutoMapper;
 using JobSearchManagerBackEnd.Data;
 using JobSearchManagerBackEnd.DTOs;
 using JobSearchManagerBackEnd.Entities;
+using JobSearchManagerBackEnd.Repositories;
 using JobSearchManagerBackEnd.Texts;
 using JobSearchManagerBackEnd.Validators;
 using Microsoft.AspNetCore.Mvc;
@@ -41,33 +42,64 @@ internal static class JobApplicationMethods
         [FromBody] JobApplicationPostDTO data
     )
     {
-        if (data is null)
+        var validationResult = CheckGivenDataForPostingOrUpdating(database, data);
+
+        if (validationResult is not null)
         {
-            return Results.Problem(
-                detail: RequestsErrorTexts.ERROR_EMPTY_DATA,
-                statusCode: StatusCodes.Status500InternalServerError
-            );
+            return validationResult;
         }
 
-        // Validation of the formats of the sent data
-        DataValidator validator = new(database.Statuses, data);
-        var potentialErrors = validator.ValidatePostedOneJobApplication();
-
-        if (potentialErrors is not null)
-        {
-            return Results.ValidationProblem(potentialErrors);
-        }
+        var jobAppRepository = new JobApplicationRepository(database);
+        var statusRepository = new StatusRepository(database);
 
         // The status can be retrieved without any error because it was previously checked
         // TODO (PERHAPS) : ADD UPPERCASE CHECK FOR THE GUID
-        Status status = database
-            .Statuses.Where(s => data.StatusId.Equals(s.Guid.ToString()))
-            .Single();
+        Status status = statusRepository.GetStatusById(data.StatusId);
 
         JobApplication job = EntitiesGenerator.GeneratePostedJobApplication(data, status);
 
-        database.JobApplications.Add(job);
-        database.SaveChanges();
+        jobAppRepository.InsertOne(job);
+
+        return Results.Ok(mapper.Map<JobApplicationGetDTO>(job));
+    }
+
+    /// <summary>
+    /// Update an existing job application in the database
+    /// </summary>
+    /// <response code="200">The job application has been updated</response>
+    /// <response code="400">The formats of some entries are invalid</response>
+    /// <response code="500">An error occurred into the process, returns an explicit information message</response>
+    internal static IResult UpdateOne(
+        [FromServices] SqlServerDbContext database,
+        [FromServices] IMapper mapper,
+        [FromBody] JobApplicationPostDTO data,
+        [FromQuery] string id
+    )
+    {
+        var validationResult = CheckGivenDataForPostingOrUpdating(database, data);
+        
+        if (validationResult is not null)
+        {
+            return validationResult;
+        }
+
+        var jobAppRepository = new JobApplicationRepository(database);
+        var statusRepository = new StatusRepository(database);
+
+        // The status can be retrieved without any error because it was previously checked
+        // TODO (PERHAPS) : ADD UPPERCASE CHECK FOR THE GUID
+        Status status = statusRepository.GetStatusById(data.StatusId);
+
+        JobApplication? job = jobAppRepository.GetOneById(id);
+
+        if (job is null)
+        {
+            return Results.NotFound(RequestsErrorTexts.ERROR_JOB_APPLICATION_NOT_IDENTIFIED);
+        }
+
+        EntitiesUpdator.UpdateJobApplication(job, data, status);
+
+        jobAppRepository.UpdateOne(job);
 
         return Results.Ok(mapper.Map<JobApplicationGetDTO>(job));
     }
@@ -104,5 +136,34 @@ internal static class JobApplicationMethods
         }
 
         return Results.NotFound(RequestsErrorTexts.ERROR_JOB_APPLICATION_NOT_IDENTIFIED);
+    }
+
+    /// <summary>
+    /// Checks the data sent by the user to create or update a job application and returns an error if any
+    /// </summary>
+    /// <param name="database">Entity Framework Db Context</param>
+    /// <param name="data">The job application data to validate</param>
+    /// <returns>A validation error if any, otherwise null</returns>
+    private static IResult? CheckGivenDataForPostingOrUpdating(
+        SqlServerDbContext database, JobApplicationPostDTO data
+    ) {
+        if (data is null)
+        {
+            return Results.Problem(
+                detail: RequestsErrorTexts.ERROR_EMPTY_DATA,
+                statusCode: StatusCodes.Status500InternalServerError
+            );
+        }
+
+        // Validation of the formats of the sent data
+        DataValidator validator = new(database.Statuses, data);
+        var potentialErrors = validator.ValidatePostedOneJobApplication();
+
+        if (potentialErrors is not null)
+        {
+            return Results.ValidationProblem(potentialErrors);
+        }
+
+        return null;
     }
 }
