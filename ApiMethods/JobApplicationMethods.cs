@@ -2,6 +2,7 @@ using AutoMapper;
 using JobSearchManagerBackEnd.Data;
 using JobSearchManagerBackEnd.DTOs;
 using JobSearchManagerBackEnd.Entities;
+using JobSearchManagerBackEnd.ImportTools;
 using JobSearchManagerBackEnd.Repositories;
 using JobSearchManagerBackEnd.Texts;
 using JobSearchManagerBackEnd.Validators;
@@ -102,6 +103,59 @@ internal static class JobApplicationMethods
         jobAppRepository.UpdateOne(job);
 
         return Results.Ok(mapper.Map<JobApplicationGetDTO>(job));
+    }
+
+    /// <summary>
+    /// Import a list of job applications from a .xlsx file
+    /// </summary>
+    /// <param name="database">Db Context</param>
+    /// <exception cref="Exception">Appears if a cell is not properly read</exception>
+    internal static IResult ImportSeveralFromXlsx(
+        [FromServices] SqlServerDbContext database
+    )
+    {
+        int columnsQuantity = 16;
+        int firstRowIndex = 2;
+        int firstColIndex = 4;
+        string fileName = "Test-import.xlsx";
+
+        JobApplication jobApp;
+        JobApplicationPostDTO jobAppDto;
+        Status defaultStatus = database.Statuses.First();
+
+        // Process the retrieved data and return an error IMMEDIATELY when a validation error is detected
+        foreach (var rowData in ReadFromXlsx.RetrieveData(fileName, columnsQuantity, firstRowIndex, firstColIndex))
+        {
+            jobAppDto = new JobApplicationPostDTO
+            {
+                Date = rowData[12],
+                Source = rowData[0],
+                IsSpontaneous = false,
+                IsFromMyInitiative = true,
+                // IsSpontaneous = data[4],
+                // IsFromMyInitiative = data[5],
+                OfferUrl = rowData[3],
+                Position = rowData[4],
+                Place = rowData[5],
+                StatusId = defaultStatus.Guid.ToString(),
+                Motivations = rowData[7],
+                Notes = rowData[8],
+                Contacts = rowData[9],
+                // FeelingLevel = data[13]
+            };
+
+            var validationResult = CheckGivenDataForPostingOrUpdating(database, jobAppDto);
+        
+            if (validationResult is not null)
+            {
+                return validationResult;
+            }
+
+            jobApp = EntitiesGenerator.GeneratePostedJobApplication(jobAppDto, defaultStatus);
+            Console.WriteLine(jobApp.Source);
+        }
+
+        return Results.Ok();
     }
 
     /// <summary>

@@ -16,7 +16,7 @@ internal static class ReadFromXlsx
     /// <param name="firstColIndex"></param>
     /// <returns>A list of string[]</returns>
     /// <exception cref="Exception">Appears if a row or a cell is not properly detected</exception>
-    internal static List<string[]> RetrieveData(string fileName, int columnsQty, int firstRowIndex, int firstColIndex)
+    internal static IEnumerable<string[]> RetrieveData(string fileName, int columnsQty, int firstRowIndex, int firstColIndex)
     {
         List<string[]> dataList = new List<string[]>();
 
@@ -48,9 +48,9 @@ internal static class ReadFromXlsx
                 //Console.WriteLine($"Row {rowIndex}, Column {colIndex}: Cell value = {cellValue}");
             }
 
+            yield return dataList[rowIndex - firstRowIndex];
+
             Console.WriteLine($"Row {rowIndex}: Source cell value = {dataList[rowIndex - firstRowIndex][0]}");
         }
-
-        return dataList;
     }
 }
