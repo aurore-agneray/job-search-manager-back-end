@@ -16,7 +16,7 @@ internal static class ReadFromXlsx
     /// <param name="firstColIndex"></param>
     /// <returns>A list of string[]</returns>
     /// <exception cref="Exception">Appears if a row or a cell is not properly detected</exception>
-    internal static IEnumerable<string[]> RetrieveData(string fileName, int columnsQty, int firstRowIndex, int firstColIndex)
+    internal static IEnumerable<string[]> RetrieveData(string fileName, int firstRowIndex, int firstColIndex, int lastColIndex)
     {
         List<string[]> dataList = new List<string[]>();
 
@@ -32,9 +32,9 @@ internal static class ReadFromXlsx
         for (int rowIndex = firstRowIndex; rowIndex <= lastUsedRow.RowNumber(); rowIndex++)
         {
             var row = sheetWithJobApplications.Row(rowIndex);
-            dataList.Add(new string[columnsQty]);
+            dataList.Add(new string[lastColIndex - firstColIndex]);
 
-            for (int colIndex = firstColIndex; colIndex <= columnsQty; colIndex++)
+            for (int colIndex = firstColIndex; colIndex <= lastColIndex - firstColIndex; colIndex++)
             {
                 var cell = row.Cell(colIndex);
 
