@@ -32,9 +32,11 @@ internal static class ReadFromXlsx
         for (int rowIndex = firstRowIndex; rowIndex <= lastUsedRow.RowNumber(); rowIndex++)
         {
             var row = sheetWithJobApplications.Row(rowIndex);
-            dataList.Add(new string[lastColIndex - firstColIndex]);
+            dataList.Add(new string[lastColIndex - firstColIndex + 1]);
 
-            for (int colIndex = firstColIndex; colIndex <= lastColIndex - firstColIndex; colIndex++)
+            // The Excel file columns are 1-based, but the returned array is 0-based and only contains
+            // the columns requested by firstColIndex/lastColIndex.
+            for (int colIndex = firstColIndex; colIndex <= lastColIndex; colIndex++)
             {
                 var cell = row.Cell(colIndex);
 

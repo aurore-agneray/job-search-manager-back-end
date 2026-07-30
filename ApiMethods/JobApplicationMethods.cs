@@ -112,14 +112,20 @@ internal static class JobApplicationMethods
     /// </summary>
     /// <param name="database">Db Context</param>
     /// <exception cref="Exception">Appears if a cell is not properly read</exception>
+    /// <response code="200">Returns the number of inserted job applications</response>
+    /// <response code="400">The formats of some entries are invalid</response>
+    /// <response code="500">An error occurred into the process, returns an explicit information message</response>
     internal static IResult ImportSeveralFromXlsx(
         [FromServices] SqlServerDbContext database
     )
     {
+        int jobApplicationsCounter = 0;
         int firstRowIndex = 2;
         int firstColIndex = 4;
         int lastColIndex = 16;
         string fileName = "Test-import.xlsx";
+
+        var jobAppRepository = new JobApplicationRepository(database);
 
         JobApplication jobApp;
         JobApplicationPostDTO jobAppDto;
@@ -128,14 +134,14 @@ internal static class JobApplicationMethods
         // Process the retrieved data and return an error IMMEDIATELY when a validation error is detected
         foreach (var rowData in ReadFromXlsx.RetrieveData(fileName, firstRowIndex, firstColIndex, lastColIndex))
         {
+            // The returned array is relative to the selected Excel range [4..16], so indexes 0..12
+            // correspond to Excel columns 4..16 respectively.
             jobAppDto = new JobApplicationPostDTO
             {
-                Date = rowData[11],
+                Date = rowData[12],
                 Source = rowData[0],
-                IsSpontaneous = false,
-                IsFromMyInitiative = true,
-                // IsSpontaneous = data[4],
-                // IsFromMyInitiative = data[5],
+                IsSpontaneous = rowData[1] == "TRUE" ? true : false,
+                IsFromMyInitiative = rowData[2] == "TRUE" ? true : false,
                 OfferUrl = rowData[3],
                 Position = rowData[4],
                 Place = rowData[5],
@@ -143,7 +149,7 @@ internal static class JobApplicationMethods
                 Motivations = rowData[7],
                 Notes = rowData[8],
                 Contacts = rowData[9],
-                // FeelingLevel = data[13]
+                FeelingLevel = Int32.TryParse(rowData[10], out int result) ? Convert.ToInt32(rowData[10]) : 0
             };
 
             var validationResult = CheckGivenDataForPostingOrUpdating(database, jobAppDto);
@@ -154,10 +160,12 @@ internal static class JobApplicationMethods
             }
 
             jobApp = EntitiesGenerator.GeneratePostedJobApplication(jobAppDto, defaultStatus);
-            Console.WriteLine(jobApp.Source);
+            jobAppRepository.InsertOne(jobApp);
+
+            jobApplicationsCounter += 1;
         }
 
-        return Results.Ok();
+        return Results.Ok(jobApplicationsCounter);
     }
 
     /// <summary>
