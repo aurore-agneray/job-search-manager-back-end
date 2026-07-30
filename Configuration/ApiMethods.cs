@@ -17,6 +17,10 @@ internal static class ApiMethods
             .WithName("GetAllJobApplications")
             .WithOpenApi();
 
+        app.MapGet("/import", ImportMethods.LaunchFromXlsx)
+            .WithName("ImportData")
+            .WithOpenApi();
+
         app.MapPost("/jobapplication", JobApplicationMethods.PostOne)
             .WithName("PostJobApplication")
             .WithOpenApi();
