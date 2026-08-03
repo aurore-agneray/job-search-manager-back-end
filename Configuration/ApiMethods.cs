@@ -30,6 +30,7 @@ internal static class ApiMethods
 
         app.MapPost("/importjobapps", JobApplicationMethods.ImportSeveralFromXlsx)
             .WithName("ImportJobApplications")
+            // .DisableAntiforgery()
             .WithOpenApi();
 
         app.MapPost("/jobapplication", JobApplicationMethods.PostOne)
