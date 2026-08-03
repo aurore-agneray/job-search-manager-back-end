@@ -30,6 +30,9 @@ builder.Services.AddAutoMapper(cfg =>
 string frontEndDomains = builder.Configuration.GetValue<string>("FrontEndDomains")!;
 builder.Services.AddCors(BuilderOptions.GetCorsOptions(frontEndDomains));
 
+// Necessary for files uploads !
+builder.Services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -50,5 +53,6 @@ app.UseHttpsRedirection();
 ApiMethods.Configure(app);
 
 app.UseCors();
+app.UseAntiforgery();
 
 app.Run();

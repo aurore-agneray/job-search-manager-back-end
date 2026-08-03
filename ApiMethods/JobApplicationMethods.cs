@@ -115,15 +115,25 @@ internal static class JobApplicationMethods
     /// <response code="200">Returns the number of inserted job applications</response>
     /// <response code="400">The formats of some entries are invalid</response>
     /// <response code="500">An error occurred into the process, returns an explicit information message</response>
-    internal static IResult ImportSeveralFromXlsx(
-        [FromServices] SqlServerDbContext database
+    internal static async Task<IResult> ImportSeveralFromXlsx(
+        [FromServices] SqlServerDbContext database,
+        [FromForm] IFormFile file
     )
     {
+        if (file is null || file.Length == 0)
+        {
+            return Results.BadRequest("A .xlsx file must be provided.");
+        }
+
+        if (!file.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
+        {
+            return Results.BadRequest("Only .xlsx files are supported.");
+        }
+
         int jobApplicationsCounter = 0;
         int firstRowIndex = 2;
         int firstColIndex = 4;
         int lastColIndex = 16;
-        string fileName = "Test-import.xlsx";
 
         var jobAppRepository = new JobApplicationRepository(database);
 
@@ -131,8 +141,10 @@ internal static class JobApplicationMethods
         JobApplicationPostDTO jobAppDto;
         Status defaultStatus = database.Statuses.First();
 
+        await using var stream = file.OpenReadStream();
+
         // Process the retrieved data and return an error IMMEDIATELY when a validation error is detected
-        foreach (var rowData in ReadFromXlsx.RetrieveData(fileName, firstRowIndex, firstColIndex, lastColIndex))
+        foreach (var rowData in ReadFromXlsx.RetrieveData(stream, firstRowIndex, firstColIndex, lastColIndex))
         {
             // The returned array is relative to the selected Excel range [4..16], so indexes 0..12
             // correspond to Excel columns 4..16 respectively.

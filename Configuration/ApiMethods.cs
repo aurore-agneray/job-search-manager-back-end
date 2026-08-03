@@ -1,4 +1,5 @@
 using JobSearchManagerBackEnd.ApiMethods;
+using Microsoft.AspNetCore.Antiforgery;
 
 namespace JobSearchManagerBackEnd.Configuration;
 
@@ -13,11 +14,21 @@ internal static class ApiMethods
     /// <param name="app">The object representation of the application</param>
     internal static void Configure(WebApplication app)
     {
+        // Get token endpoint
+        app.MapGet("antiforgery/token", (IAntiforgery forgeryService, HttpContext context) =>
+        {
+            var tokens = forgeryService.GetAndStoreTokens(context);
+            var xsrfToken = tokens.RequestToken!;
+            context.Response.Cookies.Append("XSRF-TOKEN", xsrfToken, new CookieOptions { HttpOnly = false });
+            return TypedResults.Content(xsrfToken, "text/plain");
+        });
+        //.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
+
         app.MapGet("/jobapplications", JobApplicationMethods.GetAll)
             .WithName("GetAllJobApplications")
             .WithOpenApi();
 
-        app.MapGet("/importjobapps", JobApplicationMethods.ImportSeveralFromXlsx)
+        app.MapPost("/importjobapps", JobApplicationMethods.ImportSeveralFromXlsx)
             .WithName("ImportJobApplications")
             .WithOpenApi();
 

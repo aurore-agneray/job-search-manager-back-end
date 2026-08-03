@@ -10,17 +10,17 @@ internal static class ReadFromXlsx
     /// <summary>
     /// Retrieves data from a .xlsx file, formatted as strings
     /// </summary>
-    /// <param name="fileName">File name</param>
+    /// <param name="fileStream">File stream</param>
     /// <param name="columnsQty">The total number of columns that will be read</param>
     /// <param name="firstRowIndex"></param>
     /// <param name="firstColIndex"></param>
     /// <returns>A list of string[]</returns>
     /// <exception cref="Exception">Appears if a row or a cell is not properly detected</exception>
-    internal static IEnumerable<string[]> RetrieveData(string fileName, int firstRowIndex, int firstColIndex, int lastColIndex)
+    internal static IEnumerable<string[]> RetrieveData(Stream fileStream, int firstRowIndex, int firstColIndex, int lastColIndex)
     {
-        List<string[]> dataList = new List<string[]>();
+        List<string[]> dataList = [];
 
-        using var workbook = new XLWorkbook(fileName);        
+        using var workbook = new XLWorkbook(fileStream);
         var sheetWithJobApplications = workbook.Worksheet(1);
         var lastUsedRow = sheetWithJobApplications.LastRowUsed();
 
