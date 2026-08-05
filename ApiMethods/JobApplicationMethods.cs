@@ -118,6 +118,7 @@ internal static class JobApplicationMethods
     [ValidateAntiForgeryToken]
     internal static async Task<IResult> ImportSeveralFromXlsx(
         [FromServices] SqlServerDbContext database,
+        [FromServices] IMapper mapper,
         [FromForm] IFormFile file
     )
     {
@@ -139,6 +140,7 @@ internal static class JobApplicationMethods
         var jobAppRepository = new JobApplicationRepository(database);
 
         JobApplication jobApp;
+        List<JobApplicationGetDTO> insertedJobApps = new();
         JobApplicationPostDTO jobAppDto;
         Status defaultStatus = database.Statuses.First();
 
@@ -173,12 +175,16 @@ internal static class JobApplicationMethods
             }
 
             jobApp = EntitiesGenerator.GeneratePostedJobApplication(jobAppDto, defaultStatus);
-            jobAppRepository.InsertOne(jobApp);
+            jobApp = jobAppRepository.InsertOne(jobApp);
+            insertedJobApps.Add(mapper.Map<JobApplicationGetDTO>(jobApp));
 
             jobApplicationsCounter += 1;
         }
 
-        return Results.Ok(jobApplicationsCounter);
+        return Results.Ok(new {
+            count = jobApplicationsCounter,
+            insertedJobApps
+        });
     }
 
     /// <summary>
