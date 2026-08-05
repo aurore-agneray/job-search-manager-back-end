@@ -112,7 +112,7 @@ internal static class JobApplicationMethods
     /// </summary>
     /// <param name="database">Db Context</param>
     /// <exception cref="Exception">Appears if a cell is not properly read</exception>
-    /// <response code="200">Returns the number of inserted job applications</response>
+    /// <response code="200">Returns an object with the number of inserted job applications and a list of JobApplicationGetDTOs</response>
     /// <response code="400">The formats of some entries are invalid</response>
     /// <response code="500">An error occurred into the process, returns an explicit information message</response>
     [ValidateAntiForgeryToken]
