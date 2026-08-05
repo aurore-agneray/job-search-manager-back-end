@@ -31,7 +31,16 @@ string frontEndDomains = builder.Configuration.GetValue<string>("FrontEndDomains
 builder.Services.AddCors(BuilderOptions.GetCorsOptions(frontEndDomains));
 
 // Necessary for files uploads !
-builder.Services.AddAntiforgery(options => options.HeaderName = "X-XSRF-TOKEN");
+builder.Services.AddAntiforgery(options =>
+{
+    options.HeaderName = "X-XSRF-TOKEN";
+    options.Cookie.Name = "XSRF-TOKEN";
+    // TODO : A DECOMMENTER QUAND JE PASSERAI EN HTTPS !
+    //options.Cookie.HttpOnly = false;
+    //options.Cookie.SameSite = SameSiteMode.None;
+    //options.Cookie.Path = "/";
+    //options.Cookie.IsEssential = true;
+});
 
 // Add services to the container.
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle

@@ -115,6 +115,7 @@ internal static class JobApplicationMethods
     /// <response code="200">Returns the number of inserted job applications</response>
     /// <response code="400">The formats of some entries are invalid</response>
     /// <response code="500">An error occurred into the process, returns an explicit information message</response>
+    [ValidateAntiForgeryToken]
     internal static async Task<IResult> ImportSeveralFromXlsx(
         [FromServices] SqlServerDbContext database,
         [FromForm] IFormFile file

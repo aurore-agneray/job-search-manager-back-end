@@ -18,11 +18,10 @@ internal static class ApiMethods
         app.MapGet("antiforgery/token", (IAntiforgery forgeryService, HttpContext context) =>
         {
             var tokens = forgeryService.GetAndStoreTokens(context);
-            var xsrfToken = tokens.RequestToken!;
-            context.Response.Cookies.Append("XSRF-TOKEN", xsrfToken, new CookieOptions { HttpOnly = false });
-            return TypedResults.Content(xsrfToken, "text/plain");
+            var requestToken = tokens.RequestToken;
+            return TypedResults.Content(requestToken ?? string.Empty, "text/plain");
         });
-        //.RequireAuthorization(); // In a real world scenario, you'll only give this token to authorized users
+        //.RequireAuthorization(); // TODO : In a real world scenario, you'll only give this token to authorized users
 
         app.MapGet("/jobapplications", JobApplicationMethods.GetAll)
             .WithName("GetAllJobApplications")

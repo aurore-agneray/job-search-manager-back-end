@@ -31,7 +31,8 @@ public static class BuilderOptions
                 policy
                     .WithOrigins(frontDomains.Length > 0 ? frontDomains : ["http://localhost:5173"])
                     .WithHeaders("Content-type", "X-XSRF-TOKEN")
-                    .WithMethods("GET", "POST", "DELETE", "PUT");
+                    .WithMethods("GET", "POST", "DELETE", "PUT")
+                    .AllowCredentials();
             });
         };
     }
