@@ -16,9 +16,14 @@ internal class Status
     public required Guid Guid { get; set; }
 
     /// <summary>
-    /// Name of the status (Sent, Processing, Rejected, etc)
+    /// Translated name of the status (Envoyée, Pas de réponse, Ghostée, etc)
     /// </summary>
     public required string Name { get; set; }
+
+    /// <summary>
+    /// Code name of the status (Sent, Processing, Rejected, RefusedWithoutMeeting, etc)
+    /// </summary>
+    public required string CodeName { get; set; }
 
     /// <summary>
     /// Color associated to the status for the front-end web app

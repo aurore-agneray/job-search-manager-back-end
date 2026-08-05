@@ -138,17 +138,20 @@ internal static class JobApplicationMethods
         int lastColIndex = 16;
 
         var jobAppRepository = new JobApplicationRepository(database);
+        var statusRepository = new StatusRepository(database);
 
         JobApplication jobApp;
         List<JobApplicationGetDTO> insertedJobApps = new();
         JobApplicationPostDTO jobAppDto;
-        Status defaultStatus = database.Statuses.First();
+        Status status;
 
         await using var stream = file.OpenReadStream();
 
         // Process the retrieved data and return an error IMMEDIATELY when a validation error is detected
         foreach (var rowData in ReadFromXlsx.RetrieveData(stream, firstRowIndex, firstColIndex, lastColIndex))
         {
+            status = statusRepository.GetStatusByCodeName(rowData[6]);
+
             // The returned array is relative to the selected Excel range [4..16], so indexes 0..12
             // correspond to Excel columns 4..16 respectively.
             jobAppDto = new JobApplicationPostDTO
@@ -160,7 +163,7 @@ internal static class JobApplicationMethods
                 OfferUrl = rowData[3],
                 Position = rowData[4],
                 Place = rowData[5],
-                StatusId = defaultStatus.Guid.ToString(),
+                StatusId = status.Guid.ToString(),
                 Motivations = rowData[7],
                 Notes = rowData[8],
                 Contacts = rowData[9],
@@ -174,7 +177,7 @@ internal static class JobApplicationMethods
                 return validationResult;
             }
 
-            jobApp = EntitiesGenerator.GeneratePostedJobApplication(jobAppDto, defaultStatus);
+            jobApp = EntitiesGenerator.GeneratePostedJobApplication(jobAppDto, status);
             jobApp = jobAppRepository.InsertOne(jobApp);
             insertedJobApps.Add(mapper.Map<JobApplicationGetDTO>(jobApp));
 
