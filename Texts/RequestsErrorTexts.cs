@@ -14,6 +14,8 @@ internal class RequestsErrorTexts
     public const string ERROR_JOB_APPLICATION_NOT_IDENTIFIED = "La candidature n'a pas été trouvée";
     public const string ERROR_DATE_FORMAT = "Le format de la date fournie est incorrect";
     public const string ERROR_URL_FORMAT = "Le format de l'URL fournie est incorrect";
+    public const string ERROR_IMPORT_WITHOUT_FILE = "Un fichier au format .xlsx doit être fourni.";
+    public const string ERROR_IMPORT_FORMAT = "Seuls les fichiers .xlsx sont acceptés.";
 
     public static string GetRequiredMessage(string fieldName)
     {

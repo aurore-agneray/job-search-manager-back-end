@@ -124,12 +124,12 @@ internal static class JobApplicationMethods
     {
         if (file is null || file.Length == 0)
         {
-            return Results.BadRequest("A .xlsx file must be provided.");
+            return Results.BadRequest(RequestsErrorTexts.ERROR_IMPORT_WITHOUT_FILE);
         }
 
         if (!file.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
         {
-            return Results.BadRequest("Only .xlsx files are supported.");
+            return Results.BadRequest(RequestsErrorTexts.ERROR_IMPORT_FORMAT);
         }
 
         int jobApplicationsCounter = 0;
