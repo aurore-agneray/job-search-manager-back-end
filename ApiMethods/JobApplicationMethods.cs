@@ -143,7 +143,7 @@ internal static class JobApplicationMethods
         JobApplication jobApp;
         List<JobApplicationGetDTO> insertedJobApps = new();
         JobApplicationPostDTO jobAppDto;
-        Status status;
+        Status? status;
 
         await using var stream = file.OpenReadStream();
 
@@ -151,6 +151,11 @@ internal static class JobApplicationMethods
         foreach (var rowData in ReadFromXlsx.RetrieveData(stream, firstRowIndex, firstColIndex, lastColIndex))
         {
             status = statusRepository.GetStatusByCodeName(rowData[6]);
+
+            if (status is null)
+            {
+                return Results.BadRequest(RequestsErrorTexts.ERROR_STATUS_NOT_IDENTIFIED);
+            }
 
             // The returned array is relative to the selected Excel range [4..16], so indexes 0..12
             // correspond to Excel columns 4..16 respectively.
