@@ -1,4 +1,5 @@
 using ClosedXML.Excel;
+using JobSearchManagerBackEnd.Texts;
 
 namespace JobSearchManagerBackEnd.ImportTools;
 
@@ -26,7 +27,7 @@ internal static class ReadFromXlsx
 
         if (lastUsedRow == null)
         {
-            throw new Exception("The last row has not been detected !");
+            throw new Exception(InternalErrorTexts.ERROR_READ_XLSX_LAST_ROW);
         }
 
         for (int rowIndex = firstRowIndex; rowIndex <= lastUsedRow.RowNumber(); rowIndex++)
@@ -42,17 +43,15 @@ internal static class ReadFromXlsx
 
                 if (cell == null)
                 {
-                    throw new Exception($"The cell at row {rowIndex}, column {colIndex} has not been detected !");
+                    throw new Exception(string.Format(InternalErrorTexts.ERROR_READ_XLSX_CELL, rowIndex, colIndex));
                 }
 
                 dataList[rowIndex - firstRowIndex][colIndex - firstColIndex] = cell.GetString();
-
-                //Console.WriteLine($"Row {rowIndex}, Column {colIndex}: Cell value = {cellValue}");
             }
 
             yield return dataList[rowIndex - firstRowIndex];
 
-            Console.WriteLine($"Row {rowIndex}: Source cell value = {dataList[rowIndex - firstRowIndex][0]}");
+            Console.WriteLine(string.Format(InternalLogTexts.LOG_IMPORT_JOB_APPLICATIONS, rowIndex, dataList[rowIndex - firstRowIndex][0]));
         }
     }
 }

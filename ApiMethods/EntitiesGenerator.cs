@@ -36,34 +36,32 @@ internal static class EntitiesGenerator
     }
 
     /// <summary>
-    /// Generate a job application from the data IMPORTED from a file by the user
+    /// Generate a job application POST DTO from the data IMPORTED from a file by the user
     /// </summary>
     /// <param name="data">Data retrieved from the file</param>
-    /// <param name="status">The status entity to bind to the job application</param>
-    /// <returns>A new JobApplication object</returns>
-    internal static JobApplication GenerateImportedJobApplication(
+    /// <param name="statusGuid">The GUID of the status to bind to the job application</param>
+    /// <returns>A new JobApplicationPostDTO object</returns>
+    internal static JobApplicationPostDTO GenerateImportedJobApplicationDTO(
         string[] data,
-        Status status
+        string statusGuid
     )
     {
-        var jobAppDto = new JobApplicationPostDTO
+        // The returned array is relative to the selected Excel range [4..16], so indexes 0..12
+        // correspond to Excel columns 4..16 respectively.
+        return new JobApplicationPostDTO
         {
             Date = data[12],
             Source = data[0],
-            IsSpontaneous = false,
-            IsFromMyInitiative = true,
-            // IsSpontaneous = data[4],
-            // IsFromMyInitiative = data[5],
+            IsSpontaneous = data[1] == "TRUE" ? true : false,
+            IsFromMyInitiative = data[2] == "TRUE" ? true : false,
             OfferUrl = data[3],
             Position = data[4],
             Place = data[5],
-            StatusId = status.Id.ToString(),
+            StatusId = statusGuid,
             Motivations = data[7],
             Notes = data[8],
             Contacts = data[9],
-            // FeelingLevel = data[13]
+            FeelingLevel = Int32.TryParse(data[10], out int result) ? Convert.ToInt32(data[10]) : 0
         };
-
-        return GeneratePostedJobApplication(jobAppDto, status);
     }
 }

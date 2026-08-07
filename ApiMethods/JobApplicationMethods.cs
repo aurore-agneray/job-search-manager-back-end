@@ -132,7 +132,7 @@ internal static class JobApplicationMethods
             return Results.BadRequest(RequestsErrorTexts.ERROR_IMPORT_FORMAT);
         }
 
-        int jobApplicationsCounter = 0;
+        int jobApplicationsCounter = 0; // I could delete this variable but it's useful for debugging !
         int firstRowIndex = 2;
         int firstColIndex = 4;
         int lastColIndex = 16;
@@ -157,23 +157,7 @@ internal static class JobApplicationMethods
                 return Results.BadRequest(RequestsErrorTexts.ERROR_STATUS_NOT_IDENTIFIED);
             }
 
-            // The returned array is relative to the selected Excel range [4..16], so indexes 0..12
-            // correspond to Excel columns 4..16 respectively.
-            jobAppDto = new JobApplicationPostDTO
-            {
-                Date = rowData[12],
-                Source = rowData[0],
-                IsSpontaneous = rowData[1] == "TRUE" ? true : false,
-                IsFromMyInitiative = rowData[2] == "TRUE" ? true : false,
-                OfferUrl = rowData[3],
-                Position = rowData[4],
-                Place = rowData[5],
-                StatusId = status.Guid.ToString(),
-                Motivations = rowData[7],
-                Notes = rowData[8],
-                Contacts = rowData[9],
-                FeelingLevel = Int32.TryParse(rowData[10], out int result) ? Convert.ToInt32(rowData[10]) : 0
-            };
+            jobAppDto = EntitiesGenerator.GenerateImportedJobApplicationDTO(rowData, status.Guid.ToString());
 
             var validationResult = CheckGivenDataForPostingOrUpdating(database, jobAppDto);
         

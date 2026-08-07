@@ -1,3 +1,4 @@
+using JobSearchManagerBackEnd;
 using JobSearchManagerBackEnd.Configuration;
 using JobSearchManagerBackEnd.Data;
 using JobSearchManagerBackEnd.Texts;
@@ -33,8 +34,8 @@ builder.Services.AddCors(BuilderOptions.GetCorsOptions(frontEndDomains));
 // Necessary for files uploads !
 builder.Services.AddAntiforgery(options =>
 {
-    options.HeaderName = "X-XSRF-TOKEN";
-    options.Cookie.Name = "XSRF-TOKEN";
+    options.HeaderName = Constants.ANTIFORGERY_HEADER_NAME;
+    options.Cookie.Name = Constants.ANTIFORGERY_COOKIE_NAME;
     // TODO : A DECOMMENTER QUAND JE PASSERAI EN HTTPS !
     //options.Cookie.HttpOnly = false;
     //options.Cookie.SameSite = SameSiteMode.None;
