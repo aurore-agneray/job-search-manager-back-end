@@ -3,12 +3,12 @@ using JobSearchManagerBackEnd.Data;
 using JobSearchManagerBackEnd.DTOs;
 using Microsoft.AspNetCore.Mvc;
 
-namespace JobSearchManagerBackEnd.ApiMethods;
+namespace JobSearchManagerBackEnd.Services;
 
 /// <summary>
 /// Defines all CRUD methods for the Status entities
 /// </summary>
-internal static class StatusMethods
+internal static class StatusServices
 {
     /// <summary>
     /// Get all statuses from the database

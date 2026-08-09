@@ -1,4 +1,4 @@
-using JobSearchManagerBackEnd.ApiMethods;
+using JobSearchManagerBackEnd.Services;
 using Microsoft.AspNetCore.Antiforgery;
 
 namespace JobSearchManagerBackEnd.Configuration;
@@ -6,7 +6,7 @@ namespace JobSearchManagerBackEnd.Configuration;
 /// <summary>
 /// Describes the CRUD methods of the application
 /// </summary>
-internal static class ApiMethods
+internal static class ApiServices
 {
     /// <summary>
     /// Configure the API methods of the application, have to be called into the Program.cs file
@@ -23,27 +23,27 @@ internal static class ApiMethods
         });
         //.RequireAuthorization(); // TODO : In a real world scenario, you'll only give this token to authorized users
 
-        app.MapGet("/jobapplications", JobApplicationMethods.GetAll)
+        app.MapGet("/jobapplications", JobApplicationServices.GetAll)
             .WithName("GetAllJobApplications")
             .WithOpenApi();
 
-        app.MapPost("/importjobapps", JobApplicationMethods.ImportSeveralFromXlsx)
+        app.MapPost("/importjobapps", JobApplicationServices.ImportSeveralFromXlsx)
             .WithName("ImportJobApplications")
             // .DisableAntiforgery()
             .WithOpenApi();
 
-        app.MapPost("/jobapplication", JobApplicationMethods.PostOne)
+        app.MapPost("/jobapplication", JobApplicationServices.PostOne)
             .WithName("PostJobApplication")
             .WithOpenApi();
 
-        app.MapPut("/jobapplication", JobApplicationMethods.UpdateOne)
+        app.MapPut("/jobapplication", JobApplicationServices.UpdateOne)
             .WithName("UpdateJobApplication")
             .WithOpenApi();
 
-        app.MapDelete("/jobapplication", JobApplicationMethods.DeleteOne)
+        app.MapDelete("/jobapplication", JobApplicationServices.DeleteOne)
             .WithName("DeleteJobApplication")
             .WithOpenApi();
 
-        app.MapGet("/statuses", StatusMethods.GetAll).WithName("GetAllStatuses").WithOpenApi();
+        app.MapGet("/statuses", StatusServices.GetAll).WithName("GetAllStatuses").WithOpenApi();
     }
 }

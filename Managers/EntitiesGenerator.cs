@@ -1,7 +1,7 @@
 using JobSearchManagerBackEnd.DTOs;
 using JobSearchManagerBackEnd.Entities;
 
-namespace JobSearchManagerBackEnd.ApiMethods;
+namespace JobSearchManagerBackEnd.Managers;
 
 /// <summary>
 /// Dedicated class to generate entities from the data sent by the user

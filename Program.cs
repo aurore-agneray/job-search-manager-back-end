@@ -60,7 +60,7 @@ if (app.Environment.IsDevelopment())
 app.UseHttpsRedirection();
 
 // Configures my API routes and methods
-ApiMethods.Configure(app);
+ApiServices.Configure(app);
 
 app.UseCors();
 app.UseAntiforgery();

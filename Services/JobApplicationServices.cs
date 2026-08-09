@@ -3,18 +3,19 @@ using JobSearchManagerBackEnd.Data;
 using JobSearchManagerBackEnd.DTOs;
 using JobSearchManagerBackEnd.Entities;
 using JobSearchManagerBackEnd.ImportTools;
+using JobSearchManagerBackEnd.Managers;
 using JobSearchManagerBackEnd.Repositories;
 using JobSearchManagerBackEnd.Texts;
 using JobSearchManagerBackEnd.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobSearchManagerBackEnd.ApiMethods;
+namespace JobSearchManagerBackEnd.Services;
 
 /// <summary>
 /// Defines all CRUD methods for the JobApplication entities
 /// </summary>
-internal static class JobApplicationMethods
+internal static class JobApplicationServices
 {
     /// <summary>
     /// Get all job applications from the database
