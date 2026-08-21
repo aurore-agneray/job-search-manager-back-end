@@ -35,4 +35,16 @@ internal class StatusRepository
             .Statuses.Where(s => statusId.Equals(s.Guid.ToString()))
             .Single();
     }
+
+    /// <summary>
+    /// Retrieves a Status entity from the database based on the provided Code Name.
+    /// </summary>
+    /// <param name="codeName">The code name of the status to retrieve</param>
+    /// <returns>The Status entity with the specified code name, or null if not found</returns>
+    internal Status? GetStatusByCodeName(string codeName)
+    {
+        return _database
+            .Statuses.Where(s => codeName.Equals(s.CodeName))
+            .FirstOrDefault();
+    }
 }

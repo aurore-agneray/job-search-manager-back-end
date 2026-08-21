@@ -29,9 +29,10 @@ public static class BuilderOptions
             options.AddDefaultPolicy(policy =>
             {
                 policy
-                    .WithOrigins(frontDomains.Length > 0 ? frontDomains : ["http://localhost:5173"])
-                    .WithHeaders("Content-type")
-                    .WithMethods("GET", "POST", "DELETE", "PUT");
+                    .WithOrigins(frontDomains.Length > 0 ? frontDomains : [Constants.DEFAULT_FRONT_DOMAIN])
+                    .WithHeaders("Content-type", Constants.ANTIFORGERY_HEADER_NAME)
+                    .WithMethods("GET", "POST", "DELETE", "PUT")
+                    .AllowCredentials();
             });
         };
     }

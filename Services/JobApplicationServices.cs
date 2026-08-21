@@ -2,18 +2,20 @@ using AutoMapper;
 using JobSearchManagerBackEnd.Data;
 using JobSearchManagerBackEnd.DTOs;
 using JobSearchManagerBackEnd.Entities;
+using JobSearchManagerBackEnd.ImportTools;
+using JobSearchManagerBackEnd.Managers;
 using JobSearchManagerBackEnd.Repositories;
 using JobSearchManagerBackEnd.Texts;
 using JobSearchManagerBackEnd.Validators;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace JobSearchManagerBackEnd.ApiMethods;
+namespace JobSearchManagerBackEnd.Services;
 
 /// <summary>
 /// Defines all CRUD methods for the JobApplication entities
 /// </summary>
-internal static class JobApplicationMethods
+internal static class JobApplicationServices
 {
     /// <summary>
     /// Get all job applications from the database
@@ -102,6 +104,80 @@ internal static class JobApplicationMethods
         jobAppRepository.UpdateOne(job);
 
         return Results.Ok(mapper.Map<JobApplicationGetDTO>(job));
+    }
+
+    /// <summary>
+    /// Import a list of job applications from a .xlsx file.
+    /// COLUMNS OF THE COMPLETE FILE :
+    /// id | date | DATE AU FORMAT TEXTE POUR SQL | source | isSpontaneous | fromMyInitiative | offerUrl | position	| place	| status | motivations | notes | contacts | feelingLevel | answerDelay (weeks) | dateForBackend
+    /// </summary>
+    /// <param name="database">Db Context</param>
+    /// <exception cref="Exception">Appears if a cell is not properly read</exception>
+    /// <response code="200">Returns an object with the number of inserted job applications and a list of JobApplicationGetDTOs</response>
+    /// <response code="400">The formats of some entries are invalid</response>
+    /// <response code="500">An error occurred into the process, returns an explicit information message</response>
+    [ValidateAntiForgeryToken]
+    internal static async Task<IResult> ImportSeveralFromXlsx(
+        [FromServices] SqlServerDbContext database,
+        [FromServices] IMapper mapper,
+        [FromForm] IFormFile file
+    )
+    {
+        if (file is null || file.Length == 0)
+        {
+            return Results.BadRequest(RequestsErrorTexts.ERROR_IMPORT_WITHOUT_FILE);
+        }
+
+        if (!file.FileName.EndsWith(".xlsx", StringComparison.OrdinalIgnoreCase))
+        {
+            return Results.BadRequest(RequestsErrorTexts.ERROR_IMPORT_FORMAT);
+        }
+
+        int jobApplicationsCounter = 0; // I could delete this variable but it's useful for debugging !
+        int firstRowIndex = 2;
+        int firstColIndex = 4;
+        int lastColIndex = 16;
+
+        var jobAppRepository = new JobApplicationRepository(database);
+        var statusRepository = new StatusRepository(database);
+
+        JobApplication jobApp;
+        List<JobApplicationGetDTO> insertedJobApps = new();
+        JobApplicationPostDTO jobAppDto;
+        Status? status;
+
+        await using var stream = file.OpenReadStream();
+
+        // Process the retrieved data and return an error IMMEDIATELY when a validation error is detected
+        foreach (var rowData in ReadFromXlsx.RetrieveData(stream, firstRowIndex, firstColIndex, lastColIndex))
+        {
+            status = statusRepository.GetStatusByCodeName(rowData[6]);
+
+            if (status is null)
+            {
+                return Results.BadRequest(RequestsErrorTexts.ERROR_STATUS_NOT_IDENTIFIED);
+            }
+
+            jobAppDto = EntitiesGenerator.GenerateImportedJobApplicationDTO(rowData, status.Guid.ToString());
+
+            var validationResult = CheckGivenDataForPostingOrUpdating(database, jobAppDto);
+        
+            if (validationResult is not null)
+            {
+                return validationResult;
+            }
+
+            jobApp = EntitiesGenerator.GeneratePostedJobApplication(jobAppDto, status);
+            jobApp = jobAppRepository.InsertOne(jobApp);
+            insertedJobApps.Add(mapper.Map<JobApplicationGetDTO>(jobApp));
+
+            jobApplicationsCounter += 1;
+        }
+
+        return Results.Ok(new {
+            count = jobApplicationsCounter,
+            insertedJobApps
+        });
     }
 
     /// <summary>

@@ -38,10 +38,12 @@ internal class JobApplicationRepository
     /// Inserts a new JobApplication entity into the database.
     /// </summary>
     /// <param name="jobApplication">The job application to insert</param>
-    internal void InsertOne(JobApplication jobApplication)
+    /// <returns>The inserted job application with its generated IDs</returns>
+    internal JobApplication InsertOne(JobApplication jobApplication)
     {
-        _database.JobApplications.Add(jobApplication);
+        var newJobAppTracking = _database.JobApplications.Add(jobApplication);
         _database.SaveChanges();
+        return newJobAppTracking.Entity;
     }
 
     /// <summary>
