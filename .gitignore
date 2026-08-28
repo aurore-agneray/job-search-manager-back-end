@@ -369,5 +369,7 @@ FodyWeavers.xsd
 appsettings.json
 appsettings.*.json
 
-# MY FOLDERS
+# MY FOLDERS AND FILES
 scripts
+.venv/
+*.py

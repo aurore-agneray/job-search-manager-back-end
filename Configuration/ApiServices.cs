@@ -45,5 +45,9 @@ internal static class ApiServices
             .WithOpenApi();
 
         app.MapGet("/statuses", StatusServices.GetAll).WithName("GetAllStatuses").WithOpenApi();
+
+        app.MapGet("/joboffersfrompython", ExternalJobOffersServices.GetFromPythonScript)
+            .WithName("GetJobOffersFromPythonScript")
+            .WithOpenApi();
     }
 }
