@@ -13,13 +13,15 @@ internal static class ExternalJobOffersServices
     /// </summary>
     internal static IResult GetFromPythonScript()
     {
-        List<JobOfferDTO> jobOffers = [];
+        Dictionary<string, List<JobOfferDTO>> jobOffersByCompanyDict = [];
+        string companyName = string.Empty;
+        List<JobOfferDTO> jobOffersOfACompany = [];
         string[] offersData;
 
         try
         {
             // Chemin vers le script Python (relatif ou absolu)
-            string scriptPath = @"get_job_offers_from_python.py";
+            string scriptPath = @"PythonScripts/get_job_offers_from_python.py";
 
             if (!File.Exists(scriptPath))
             {
@@ -63,24 +65,43 @@ internal static class ExternalJobOffersServices
 
             foreach (var line in offersLines)
             {
-                if (!string.IsNullOrEmpty(line))
+                if (string.IsNullOrEmpty(line))
                 {
-                    offersData = output.Split(";;");
-
-                    if (offersData.Count() == 3)
+                    // Put the offers of the last requested company into the dictionary
+                    jobOffersByCompanyDict.Add(companyName, jobOffersOfACompany);  
+                }
+                else
+                {
+                    if (line.StartsWith("---------"))
                     {
-                        jobOffers.Add(
-                            new JobOfferDTO {
-                                Name = offersData[0].Trim(), 
-                                Url = offersData[1].Trim(), 
-                                Location = offersData[2].Trim()
-                            }
-                        );
-                    }               
+                        if (!string.IsNullOrEmpty(companyName))
+                        {
+                            // Add the previous results into the dictionary
+                            jobOffersByCompanyDict.Add(companyName, jobOffersOfACompany);                            
+                            jobOffersOfACompany = [];                           
+                        }
+
+                        companyName = line.Trim(['-', ' ']);
+                    }
+                    else
+                    {
+                        offersData = line.Split(";;");
+
+                        if (offersData.Count() == 3)
+                        {
+                            jobOffersOfACompany.Add(
+                                new JobOfferDTO {
+                                    Name = offersData[0].Trim(), 
+                                    Url = offersData[1].Trim(), 
+                                    Location = offersData[2].Trim()
+                                }
+                            );
+                        }                        
+                    }              
                 }            
             }
 
-            return Results.Ok(jobOffers);
+            return Results.Ok(jobOffersByCompanyDict);
         }
         catch (Exception ex)
         {
